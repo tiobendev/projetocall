@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Landing Page</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    .countdown {
+      font-size: 1.5rem;
+      color: #ffffff;
+      margin-top: 1rem;
+    }
+    .btn-custom {
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      color: white;
+      border: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-custom:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4);
+    }
+    .profile-img {
+      border-radius: 9999px;
+      object-fit: cover;
+      height: 96px;
+      width: 96px;
+      margin: 0 auto 1.5rem;
+    }
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .popup {
+      background: #1f2937;
+      padding: 2rem;
+      border-radius: 1rem;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+    }
+    .popup button {
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body class="bg-zinc-950 flex items-center justify-center min-h-screen text-white">
+
+  <div class="container text-center max-w-md px-8 py-12 bg-zinc-900 rounded-3xl shadow-2xl">
+    <img 
+      src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+      alt="Profile Image" 
+      class="profile-img"
+    />
+    <h1 class="text-5xl font-extrabold mb-6 text-zinc-50">Nome do Cliente</h1>
+    <p class="text-xl text-zinc-200 mb-8">Soluções perfeitas para otimizar seu tráfego pago e transformar resultados em oportunidades reais.</p>
+    <button id="callButton" class="btn btn-custom px-8 py-4 rounded-full text-lg font-medium">Falar com o Gestor no Google Meet</button>
+    <p id="countdown" class="countdown text-lg hidden text-white font-medium">O gestor está em call. Você poderá entrar em contato com ele na próxima reunião!<br /> Tempo restante: <span id="timer">60:00</span></p>
+  </div>
+
+  <!-- Popup Modal -->
+  <div id="popup" class="popup-overlay hidden bg-zinc-950">
+    <div class="popup bg-zinc-900">
+      <h2 class="text-2xl font-bold text-zinc-100">Sua Call está pronta!</h2>
+      <p class="text-zinc-400 mt-4">Clique no botão abaixo para entrar na reunião.</p>
+      <button id="enterCall" class="btn btn-custom px-6 py-3">Entrar na reunião</button>
+    </div>
+  </div>
+
+  <script>
+    const callButton = document.getElementById("callButton");
+    const countdown = document.getElementById("countdown");
+    const timerElement = document.getElementById("timer");
+    const popup = document.getElementById("popup");
+    const enterCall = document.getElementById("enterCall");
+
+    callButton.addEventListener("click", () => {
+      popup.classList.remove("hidden");
+    });
+
+    enterCall.addEventListener("click", () => {
+      popup.classList.add("hidden");
+      callButton.classList.add("hidden");
+      countdown.classList.remove("hidden");
+      window.open("https://meet.google.com/", "_blank"); // Link da reunião
+
+      let timeRemaining = 60 * 60; // 60 minutos
+
+      const updateTimer = () => {
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+        timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, "0")}`;
+        timeRemaining--;
+
+        if (timeRemaining < 0) {
+          clearInterval(interval);
+          timerElement.textContent = "Tempo esgotado! Você pode iniciar uma nova call.";
+        }
+      };
+
+      updateTimer(); // Atualiza o contador
+      const interval = setInterval(updateTimer, 1000);
+    });
+  </script>
+
+</body>
+</html>
